@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<body>
+  <canvas id=canvas></canvas>
+  <script src="/js/three.js"></script>
+  <script>
+    const COLORS = {
+      GREEN: new THREE.Color(0x4CAF50),
+      RED: new THREE.Color(0xE91E63),
+    };
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas: document.getElementById('canvas'),
+    });
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xFFFFFF);
+
+    const ambientLight = new THREE.AmbientLight(0x808080);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+    directionalLight.position.set(1, 1, 1);
+    // directionalLight.target.position.set(1, -1, 1);
+    scene.add(directionalLight);
+
+    const sphere = new THREE.Mesh(
+      new THREE.SphereBufferGeometry(0.1, 7, 5),
+      new THREE.MeshPhongMaterial({
+        color: COLORS.GREEN,
+        shading: THREE.FlatShading,
+        shininess: 0,
+      })
+    );
+    const startY = 1.2;
+    sphere.position.y = startY;
+    scene.add(sphere);
+
+    const camera = new THREE.PerspectiveCamera();
+    camera.position.set(0, 1, 1);
+
+    const position = new THREE.Vector3(0, 0, 0);
+    const velocity = new THREE.Vector3(0, 0, 0);
+    let lastTime = Date.now();
+    function animate() {
+      const currentTime = Date.now();
+      const timePassed = Math.max(currentTime - lastTime, 1);
+      lastTime = currentTime;
+
+      // calculate new position
+      const newPosition = position.clone().add(velocity.clone().divideScalar(timePassed));
+      const rayBack = newPosition.clone().multiplyScalar((-1 / timePassed) * 0.25);
+      velocity.add(rayBack).multiplyScalar(0.98);
+      position.copy(newPosition);
+
+      // update sphere
+      sphere.position.copy(newPosition);
+      sphere.position.y += startY + Math.sin((currentTime * 0.00125) % (Math.PI * 2)) * 0.3;
+      sphere.rotation.y = (currentTime * 0.002) % (Math.PI * 2);
+      
+       renderer.render(scene, camera);
+
+       window.requestAnimationFrame(animate);
+    }
+    window.requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

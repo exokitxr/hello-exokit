@@ -1,0 +1,31 @@
+{
+  "name": "hello-exokit",
+  "version": "0.0.1",
+  "description": "Exokit starter demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/modulesio/hello-exokit.git"
+  },
+  "keywords": [
+    "exokit",
+    "starter",
+    "demo",
+    "webxr",
+    "webgl",
+    "webvr",
+    "magicleap"
+  ],
+  "author": "Avaer Kazmer <a@modules.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/modulesio/hello-exokit/issues"
+  },
+  "homepage": "https://github.com/modulesio/hello-exokit#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
