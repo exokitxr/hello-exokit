@@ -4,13 +4,9 @@
   <canvas id=canvas></canvas>
   <script src="/js/three.js"></script>
   <script>
-    const COLORS = {
-      GREEN: new THREE.Color(0x4CAF50),
-      RED: new THREE.Color(0xE91E63),
-    };
-
+    const canvas = document.getElementById('canvas');
     const renderer = new THREE.WebGLRenderer({
-      canvas: document.getElementById('canvas'),
+      canvas,
     });
 
     const scene = new THREE.Scene();
@@ -21,15 +17,13 @@
 
     const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
     directionalLight.position.set(1, 1, 1);
-    // directionalLight.target.position.set(1, -1, 1);
     scene.add(directionalLight);
 
     const sphere = new THREE.Mesh(
       new THREE.SphereBufferGeometry(0.1, 7, 5),
       new THREE.MeshPhongMaterial({
-        color: COLORS.GREEN,
-        shading: THREE.FlatShading,
-        shininess: 0,
+        color: new THREE.Color(0x4CAF50),
+        flatShading: true,
       })
     );
     const startY = 1.2;
@@ -63,6 +57,20 @@
        window.requestAnimationFrame(animate);
     }
     window.requestAnimationFrame(animate);
+
+    window.addEventListener('click', e => {
+      window.navigator.getVRDisplays()
+        .then(displays => {
+          if (displays.length > 0) {
+            const display = displays[0];
+            display.requestPresent([{source: canvas}])
+              .then(() => {
+                renderer.vr.enabled = true;
+                renderer.vr.setDevice(display);
+              });
+          }
+        });
+    });
   </script>
 </body>
 </html>
