@@ -77,18 +77,24 @@
     }
     window.requestAnimationFrame(animate);
 
-    window.addEventListener('click', e => {
-      window.navigator.getVRDisplays()
-        .then(displays => {
-          if (displays.length > 0) {
+    window.navigator.getVRDisplays()
+      .then(displays => {
+        if (displays.length > 0) {
+          window.addEventListener('click', e => {
             const display = displays[0];
-            display.requestPresent([{source: canvas}])
+            return display.requestPresent([{source: canvas}])
               .then(() => {
                 renderer.vr.enabled = true;
                 renderer.vr.setDevice(display);
               });
-          }
-        });
+          });
+        } else {
+          console.warn('no vr displays!');
+        }
+      })
+      .catch(err => {
+        console.warn(err);
+      });
     });
   </script>
 </body>
